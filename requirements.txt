@@ -19,7 +19,6 @@ dbus-python==1.2.16
 discord.py==1.7.3
 distlib==0.3.2
 distro==1.4.0
-distro-info===0.23ubuntu1
 entrypoints==0.3
 ffmpeg==1.4
 filelock==3.0.12
