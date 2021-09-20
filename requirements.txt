@@ -103,4 +103,3 @@ youtube-dl==2021.6.6
 yt-dlp==2021.9.2
 ytmusicapi==0.19.2
 zipp==1.0.0
-zope.interface==4.7.1
