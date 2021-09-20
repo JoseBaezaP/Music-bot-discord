@@ -89,7 +89,6 @@ systemd-python==234
 testresources==2.0.0
 tqdm==4.62.2
 traceback2==1.4.0
-ttystatus==0.38
 Twisted==18.9.0
 typing-extensions==3.10.0.2
 ubuntu-advantage-tools==20.3
