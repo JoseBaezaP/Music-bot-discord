@@ -16,6 +16,7 @@ configobj==5.0.6
 constantly==15.1.0
 cryptography==2.8
 dbus-python==1.2.16
+dbus-1== 1.8
 discord.py==1.7.3
 distlib==0.3.2
 distro==1.4.0
