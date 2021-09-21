@@ -112,6 +112,11 @@ class music(commands.Cog):
 
   @commands.command()
   async def playlist(self, ctx, *, search):
+
+    if ctx.message.author.voice == None:
+      await ctx.send( "Necesitas estar en un canal de voz para poder poner musica!")
+      return
+  
     result = self.sp.playlist(search, fields=None, market=None, additional_types=('track', ))
     self.music_quote = result['tracks']['items']
     self.music_quote = shuffle(self.music_quote)
