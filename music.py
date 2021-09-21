@@ -37,6 +37,7 @@ class music(commands.Cog):
         }
 
     def play_next(self):
+        self.music_quote.pop(0)
         if len(self.music_quote) > 0:
             video_url = createUrl(self.music_quote[0]['track']['name'])
 
@@ -137,7 +138,6 @@ class music(commands.Cog):
             await ctx.voice_client.move_to(voice_channel)
             vc = ctx.voice_client
 
-        self.music_quote.pop(0)
         voice = discord.utils.get(self.bot.voice_clients)
         voice.play(discord.FFmpegPCMAudio(url2, **self.ffmpef_options),
                    after=lambda e: self.play_next())
@@ -169,6 +169,7 @@ class music(commands.Cog):
     @commands.command()
     async def disconnect(self, ctx):
         try:
+            self.music_quote.clear()
             await ctx.voice_client.disconnect()
         except:
             await ctx.send("El bot no se encuentra en un canal")
