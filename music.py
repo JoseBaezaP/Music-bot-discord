@@ -154,7 +154,7 @@ class music(commands.Cog):
     @commands.command()
     async def song(self, ctx):
         try:
-            await ctx.send("Estas esuchando" + " " + f"{self.music_quote[0]['track']['name']}")
+            await ctx.send("Estas esuchando" + " " + f"{self.music_quote[1]['track']['name']}")
         except:
             await ctx.send("No hay nada sonando")
 
