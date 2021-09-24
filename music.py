@@ -152,7 +152,7 @@ class music(commands.Cog):
     @commands.command()
     async def song(self, ctx):
         try:
-            await ctx.send("Estas esuchando" + " " + f"{self.music_quote[0]['track']['name']}")
+            await ctx.send("Estas escuchando" + " " + f"{self.music_quote[0]['track']['name']}")
         except:
             await ctx.send("No hay nada sonando")
 
@@ -168,6 +168,7 @@ class music(commands.Cog):
     async def disconnect(self, ctx):
         try:
             self.music_quote.clear()
+            await ctx.send("Hasta la proxima perros")
             await ctx.voice_client.disconnect()
         except:
             await ctx.send("El bot no se encuentra en un canal")
