@@ -45,7 +45,6 @@ class music(commands.Cog):
                 info = ydl.extract_info(video_url, download=False)
                 url2 = info['formats'][0]['url']
 
-            self.music_quote.pop(0)
             voice = discord.utils.get(self.bot.voice_clients)
             voice.play(discord.FFmpegPCMAudio(
                 url2, **self.ffmpef_options), after=lambda e: self.play_next())
@@ -55,7 +54,6 @@ class music(commands.Cog):
 
         if len(self.music_quote) > 0:
             url2 = self.music_quote[0]
-            self.music_quote.pop(0)
             voice = discord.utils.get(self.bot.voice_clients)
             voice.play(discord.FFmpegPCMAudio(
                 url2, **self.ffmpef_options), after=lambda e: self.play_next())
@@ -137,7 +135,7 @@ class music(commands.Cog):
         else:
             await ctx.voice_client.move_to(voice_channel)
             vc = ctx.voice_client
-
+        self.music_quote.pop(0)
         voice = discord.utils.get(self.bot.voice_clients)
         voice.play(discord.FFmpegPCMAudio(url2, **self.ffmpef_options),
                    after=lambda e: self.play_next())
@@ -154,7 +152,7 @@ class music(commands.Cog):
     @commands.command()
     async def song(self, ctx):
         try:
-            await ctx.send("Estas esuchando" + " " + f"{self.music_quote[1]['track']['name']}")
+            await ctx.send("Estas esuchando" + " " + f"{self.music_quote[0]['track']['name']}")
         except:
             await ctx.send("No hay nada sonando")
 
