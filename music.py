@@ -135,7 +135,7 @@ class music(commands.Cog):
         else:
             await ctx.voice_client.move_to(voice_channel)
             vc = ctx.voice_client
-        self.music_quote.pop(0)
+
         voice = discord.utils.get(self.bot.voice_clients)
         voice.play(discord.FFmpegPCMAudio(url2, **self.ffmpef_options),
                    after=lambda e: self.play_next())
