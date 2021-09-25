@@ -154,7 +154,7 @@ class music(commands.Cog):
 
             if voice.is_playing():
                 voice.pause()
-                voice.play(discord.FFmpegPCMAudio("songs/siu.mp3"))
+                voice.play(discord.FFmpegPCMAudio("songs/tuki.mp3"))
                 time.sleep(1.2)
                 voice.pause()
                 self.play_next()
