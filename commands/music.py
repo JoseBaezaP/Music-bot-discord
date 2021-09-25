@@ -5,6 +5,7 @@ import spotipy
 import os
 import re
 import spotipy.oauth2 as oauth2
+import time
 
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
@@ -13,6 +14,7 @@ from discord.ext import commands
 from os import system
 from utils.shuffle import shuffle
 from utils.ytUrls import createUrl
+from utils.nameSong import createName
 
 load_dotenv()
 
@@ -39,37 +41,30 @@ class music(commands.Cog):
     def play_next(self):
         self.music_quote.pop(0)
         if len(self.music_quote) > 0:
-            video_url = createUrl(self.music_quote[0]['track']['name'])
 
+            video_url = createUrl(createName(self.music_quote))
+                
             with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
                 info = ydl.extract_info(video_url, download=False)
                 url2 = info['formats'][0]['url']
 
             voice = discord.utils.get(self.bot.voice_clients)
+
             voice.play(discord.FFmpegPCMAudio(
                 url2, **self.ffmpef_options), after=lambda e: self.play_next())
 
     def play_nextYT(self):
         self.music_quote.pop(0)
-
+        
         if len(self.music_quote) > 0:
             url2 = self.music_quote[0]
             voice = discord.utils.get(self.bot.voice_clients)
             voice.play(discord.FFmpegPCMAudio(
-                url2, **self.ffmpef_options), after=lambda e: self.play_next())
-
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send('pong')
-
-    @commands.command()
-    async def info(self, ctx):
-        embed = discord.Embed(
-            title=f"{ctx.guild.name}", description="Cree este bot por todo ya que no sirven otros bots :c", timestamp=datetime.datetime.utcnow())
-        await ctx.send(embed=embed)
+                url2, **self.ffmpef_options), after=lambda e: self.play_nextYT())
 
     @commands.command()
     async def play(self, ctx, *, search):
+        
 
         if ctx.message.author.voice == None:
             await ctx.send("Necesitas estar en un canal de voz para poder poner musica!")
@@ -99,6 +94,12 @@ class music(commands.Cog):
 
         self.music_quote.append(url2)
         voice = discord.utils.get(self.bot.voice_clients)
+
+        if not voice.is_playing():
+            voice.play(discord.FFmpegPCMAudio("songs/siu.mp3"))
+            time.sleep(1.2)
+            voice.pause()
+
         voice.play(discord.FFmpegPCMAudio(url2, **self.ffmpef_options),
                    after=lambda e: self.play_nextYT())
 
@@ -124,7 +125,7 @@ class music(commands.Cog):
 
         voice_channel = ctx.message.author.voice.channel
 
-        video_url = createUrl(self.music_quote[0]['track']['name'])
+        video_url = createUrl(createName(self.music_quote))
 
         with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
@@ -137,6 +138,12 @@ class music(commands.Cog):
             vc = ctx.voice_client
 
         voice = discord.utils.get(self.bot.voice_clients)
+
+        if not voice.is_playing():
+            voice.play(discord.FFmpegPCMAudio("songs/siu.mp3"))
+            time.sleep(1.2)
+            voice.pause()
+
         voice.play(discord.FFmpegPCMAudio(url2, **self.ffmpef_options),
                    after=lambda e: self.play_next())
 
@@ -146,15 +153,23 @@ class music(commands.Cog):
             voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
 
             if voice.is_playing():
-                voice.stop()
-                await self.play_next()
+                voice.pause()
+                voice.play(discord.FFmpegPCMAudio("songs/siu.mp3"))
+                time.sleep(1.2)
+                voice.pause()
+                self.play_next()
 
     @commands.command()
     async def song(self, ctx):
         try:
-            await ctx.send("Estas escuchando" + " " + f"{self.music_quote[0]['track']['name']}")
+            embed = discord.Embed(
+                title=f"{ctx.guild.name}", 
+                description="Estas escuchando" + " " +  f"{createName(self.music_quote)}", 
+                timestamp=datetime.datetime.utcnow())
+            embed.set_thumbnail(url=f"{self.music_quote[0]['track']['album']['images'][0]['url']}")
+            await ctx.send(embed=embed)
         except:
-            await ctx.send("No hay nada sonando")
+            await ctx.send("No hay nada sonando o a ucurrido un error :s")
 
     @commands.command()
     async def resume(self, ctx):
@@ -169,6 +184,7 @@ class music(commands.Cog):
         try:
             self.music_quote.clear()
             await ctx.send("Hasta la proxima perros")
+
             await ctx.voice_client.disconnect()
         except:
             await ctx.send("El bot no se encuentra en un canal")
